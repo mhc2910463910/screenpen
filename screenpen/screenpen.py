@@ -51,6 +51,8 @@ if pyqt_version == 5:
     from PyQt5.QtWidgets import QMainWindow, QApplication, QDesktopWidget
     from PyQt5.QtCore import QPoint, Qt, QSize
     from PyQt5.QtWidgets import QToolBar, QAction, QDialog, QToolButton, QMenu, QColorDialog
+    # 文件选择
+    from PyQt5.QtWidgets import QFileDialog
     from PyQt5.QtGui import (
         QIcon, QScreen, QPalette, QColor, QCursor,
         QSyntaxHighlighter, QPixmap, QKeySequence
@@ -728,12 +730,15 @@ setattr(self, 'drawChart', drawChart)
         for tb in self.toolBars:
             tb.show()
         return img
-
+    def saveLocation(self):
+        fname = QFileDialog.getExistingDirectory(self, '选择保存目录', '/home')
+        return fname
     def saveDrawing(self):
         def _saveDrawing(n=0):
             filename = f'{datetime.now().strftime("%Y%m%d_%H%M%S")}.png'
-            print(f'Saving {filename}')
-            self.captureScreen().save(f'{filename}')
+            location = self.saveLocation()+"/"
+            print(f'Saving {location}{filename}')
+            self.captureScreen().save(f'{location}{filename}')
         return _saveDrawing
 
     def colorPicker(self):
